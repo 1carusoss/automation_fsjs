@@ -1,0 +1,37 @@
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    username
+    name
+  }
+}
+mutation EditUser($input: EditUserInput!) {
+  editUser(input: $input) {
+    id
+    username
+    name
+  }
+}
+mutation DeleteUser($id: ID!) {
+  deleteUser(id: $id) {
+    id
+    username
+    name
+  }
+}
+query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    username
+    name
+  }
+}
+query GetAllUsers($nextToken: String) {
+  getAllUsers(nextToken: $nextToken) {
+    items {
+      id
+      username
+      name
+    }
+  }
+}

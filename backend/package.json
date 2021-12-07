@@ -1,0 +1,29 @@
+{
+  "name": "sfsjs-backend",
+  "version": "1.0.0",
+  "description": "AppSync + DynamoDB Stack",
+  "main": "index.js",
+  "scripts": {
+    "deploy:dev": "sls deploy --stage Dev --region us-east-1",
+    "destroy:dev": "sls remove --stage Dev --region us-east-1",
+    "generate": "graphql-codegen --config codegen.yml",
+    "build:types": "npm run generate && bash ./scripts/build-types.sh"
+  },
+  "author": "Ashton Morris",
+  "license": "ISC",
+  "config": {
+    "region": "us-east-1"
+  },
+  "dependencies": {
+    "serverless-appsync-plugin": "^1.5.0",
+    "graphql": "^15.6.0",
+    "graphql-tag": "^2.10.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/typescript": "2.2.2",
+    "@graphql-codegen/typescript-operations": "2.1.4",
+    "@graphql-codegen/typescript-react-query": "^3.2.1",
+    "@graphql-codegen/typescript-resolvers": "2.2.1"
+  }
+}

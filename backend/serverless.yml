@@ -1,0 +1,28 @@
+# https://github.com/sid88in/serverless-appsync-plugin
+
+service: SFSJS-appsync
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: SFSJS
+  stackName: SFSJSAppSyncCloudFormationStack-${self:custom.env}
+  region: ${opt:region}
+  endpointType: regional
+  tags:
+    SFSJS: SFSJS
+
+plugins:
+  - serverless-appsync-plugin
+
+resources:
+  - ${file(resources/dynamodb-table.yml)}
+  - ${file(resources/cognito-user-pool.yml)}
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  env: ${self:custom.stage}
+  region: ${opt:region}
+  appSync: ${file(resources/app-sync.yml)}
+  userPoolId: us-east-1_etvMs34jK
+  clientId: 4gslh262voc73j7rhcn1ifm066

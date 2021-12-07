@@ -1,0 +1,45 @@
+name: SFSJSAppsync-${self:custom.env}
+authenticationType: AMAZON_COGNITO_USER_POOLS
+userPoolConfig:
+  awsRegion: ${self:custom.region}
+  defaultAction: ALLOW
+  userPoolId: ${self:custom.userPoolId}
+additionalAuthenticationProviders:
+  - authenticationType: AWS_IAM
+dataSources:
+  - type: AMAZON_DYNAMODB
+    name: UserTable
+    config:
+      tableName: SFSJSUserTable-${self:custom.env}
+mappingTemplates:
+  #### queries
+  - dataSource: UserTable
+    type: Query
+    field: getUser
+    request: common/common-get-request.vtl
+    response: common/generic-response.vtl
+
+  - dataSource: UserTable
+    type: Query
+    field: getAllUsers
+    request: common/common-list-request.vtl
+    response: common/generic-response.vtl
+
+    #### mutations
+  - dataSource: UserTable
+    type: Mutation
+    field: createUser
+    request: common/common-create.vtl
+    response: common/generic-response.vtl
+
+  - dataSource: UserTable
+    type: Mutation
+    field: editUser
+    request: common/common-update-request.vtl
+    response: common/generic-response.vtl
+
+  - dataSource: UserTable
+    type: Mutation
+    field: deleteUser
+    request: common/common-delete.vtl
+    response: common/generic-response.vtl

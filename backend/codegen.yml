@@ -1,0 +1,12 @@
+overwrite: true
+schema:
+  - "schema.graphql"
+  - "graphql/appsync.graphql"
+documents: "graphql/operations.gql"
+generates:
+  graphql/index.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-resolvers
+      - typescript-react-query
