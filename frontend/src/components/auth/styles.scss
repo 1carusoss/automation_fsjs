@@ -1,0 +1,22 @@
+$facebook-blue: #4267B2;
+
+.form {
+    display: flex;
+    flex-direction: column;
+
+  .input {
+    margin-bottom: 1rem;
+    padding: .5rem;
+  }
+
+
+  .txt-sm {
+    font-size: 12px;
+  }
+
+  .btn-lnk {
+    color: $facebook-blue;
+    cursor: pointer;
+    letter-spacing: 1.1px;
+  }
+}
