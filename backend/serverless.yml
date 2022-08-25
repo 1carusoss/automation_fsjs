@@ -5,7 +5,7 @@ service: SFSJS-appsync
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: SFSJS
+  profile: default
   stackName: SFSJSAppSyncCloudFormationStack-${self:custom.env}
   region: ${opt:region}
   endpointType: regional

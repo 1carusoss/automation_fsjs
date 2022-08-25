@@ -1,0 +1,11 @@
+{
+  "name": "@scalablefsjs/types",
+  "version": "0.0.1",
+  "description": "Type declarations for SFJ.",
+  "main": "index.d.ts",
+  "scripts": {
+    "pub:types": "npm publish -access=public"
+  },
+  "author": "Ashton Morris",
+  "license": "MIT"
+}

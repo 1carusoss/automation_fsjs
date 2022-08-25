@@ -1,0 +1,17 @@
+{
+  "name": "@scalablefsjs/codegen",
+  "version": "0.0.1",
+  "description": "Generated code for the sfj frontend.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "pub:operations": "npm publish -access=public"
+  },
+  "author": "Ashton Morris",
+  "license": "MIT",
+  "dependencies": {
+    "graphql": "^16.6.0",
+    "react-query": "^3.39.2"
+  }
+}
