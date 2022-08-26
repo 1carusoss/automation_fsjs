@@ -5,19 +5,17 @@
       "name": "SFSJS-appsync"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
-      "profile": "SFSJS",
+      "profile": "default",
       "stackName": "SFSJSAppSyncCloudFormationStack-Dev",
       "region": "us-east-1",
       "endpointType": "regional",
       "tags": {
         "SFSJS": "SFSJS"
       },
+      "stage": "dev",
       "versionFunctions": true,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -62,6 +60,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -390,6 +403,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-SFSJS-appsync-Dev-ServerlessDeploymentBucketName"
             }
           },
           "UserPoolId": {
@@ -474,6 +490,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -644,12 +675,28 @@
         }
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
+    "initialServerlessConfig": {
+      "service": "SFSJS-appsync",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      },
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      }
+    },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/SFSJS-appsync/Dev/1638050664157-2021-11-27T22:04:24.157Z",
+    "artifactDirectoryName": "serverless/SFSJS-appsync/Dev/1661471509470-2022-08-25T23:51:49.470Z",
     "artifact": ""
   }
 }
