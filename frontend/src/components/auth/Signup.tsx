@@ -1,32 +1,60 @@
-import { useContext } from "react";
-import { useActor, useSelector } from "@xstate/react";
+import { useContext, useId } from "react";
 import GlobalState from "../../globalState";
-import { AuthEvents, AuthStates } from "../../machine";
+import { AuthEvents } from "../../machine";
 import { useForm } from "../../hooks";
+import { useCreateUserMutation } from "@scalablefsjs/codegen";
 
 const DEFAULT_STATE = {
   username: "",
   password: "",
   confirmPassword: "",
+  name: "",
 };
-
-function isResolvingSelector(state: any) {
-  return state.matches(AuthStates.SIGNUP_RESOLVE);
-}
 
 export default function Signup() {
   const {
-    state: { username, password, confirmPassword },
+    state: { username, password, confirmPassword, name },
     updateByKey,
+    reset,
   } = useForm(DEFAULT_STATE);
 
   const { authService } = useContext(GlobalState);
 
-  const { send } = authService;
+  const { send, state } = authService;
 
-  const [state] = useActor(authService);
+  const { isLoading, mutateAsync } = useCreateUserMutation(
+    {
+      endpoint: process.env.REACT_APP_ENDPOINT as string,
+      fetchParams: {
+        headers: { "X-API-Key": process.env.REACT_APP_APIKEY as string},
+      },
+    },
+  );
 
-  const isResolving = useSelector(authService, isResolvingSelector);
+  const id = useId();
+
+  async function createUser() {
+    if (
+      !username.length &&
+      !name.length &&
+      !password.length &&
+      !confirmPassword.length
+    )
+      throw Error("Username, name, or password missing.");
+
+    if (password !== confirmPassword) throw Error("Passwords don't match.");
+
+    const res = await (
+      await mutateAsync({ input: { username, id, name } })
+    ).createUser;
+
+    if (!res) {
+      throw Error("Something went wrong! Try again!");
+    } else {
+      reset();
+      return res;
+    }
+  }
 
   return (
     <div className="form">
@@ -37,6 +65,15 @@ export default function Signup() {
           value: username,
           onChange: (e) =>
             updateByKey({ key: "username", value: e.target.value }),
+        }}
+      />
+
+      <input
+        {...{
+          placeholder: "name",
+          className: "input",
+          value: name,
+          onChange: (e) => updateByKey({ key: "name", value: e.target.value }),
         }}
       />
 
@@ -62,19 +99,23 @@ export default function Signup() {
         }}
       />
 
-      {isResolving ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : (
         <button
           {...{
             className: "button",
             onClick: () =>
-              send({ type: AuthEvents.SIGNUP, username, password }),
+              send({ type: AuthEvents.SIGNUP, signup: createUser }),
           }}
         >
           Sign up
         </button>
       )}
+
+      <p className="txt-sm txt-sm--err">
+        {state?.context && state.context.errorMessage}
+      </p>
 
       <p className="txt-sm">
         Already have an account?{" "}

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useActor, useSelector } from "@xstate/react";
+import { useSelector } from "@xstate/react";
 import GlobalState from "../../globalState";
 import { AuthEvents, AuthStates } from "../../machine";
 import { useForm } from "../../hooks";
@@ -22,8 +22,6 @@ export default function ChangePassword() {
   const { authService } = useContext(GlobalState);
 
   const { send } = authService;
-
-  const [state] = useActor(authService);
 
   const isResolving = useSelector(authService, isResolvingSelector);
 

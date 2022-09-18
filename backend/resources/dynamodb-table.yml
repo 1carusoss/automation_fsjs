@@ -4,9 +4,9 @@ Resources:
     Properties:
       TableName: SFSJSUserTable-${self:custom.env}
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: username
           AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: username
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST

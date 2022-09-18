@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
+import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -69,7 +69,7 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 
@@ -90,7 +90,7 @@ export type QueryGetAllUsersArgs = {
 
 
 export type QueryGetUserArgs = {
-  id: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 export type TableBooleanFilterInput = {
@@ -176,14 +176,14 @@ export type EditUserMutationVariables = Exact<{
 export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'User', id: string, username: string, name: string } };
 
 export type DeleteUserMutationVariables = Exact<{
-  id: Scalars['ID'];
+  username: Scalars['String'];
 }>;
 
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'User', id: string, username: string, name: string } };
 
 export type GetUserQueryVariables = Exact<{
-  id: Scalars['ID'];
+  username: Scalars['String'];
 }>;
 
 
@@ -359,13 +359,13 @@ export interface AwsurlScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
-  deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'username'>>;
   editUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationEditUserArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAllUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserConnection']>>>, ParentType, ContextType, RequireFields<QueryGetAllUsersArgs, never>>;
-  getUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+  getUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryGetUserArgs, 'username'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -416,7 +416,7 @@ export const useCreateUserMutation = <
       options?: UseMutationOptions<CreateUserMutation, TError, CreateUserMutationVariables, TContext>
     ) =>
     useMutation<CreateUserMutation, TError, CreateUserMutationVariables, TContext>(
-      'CreateUser',
+      ['CreateUser'],
       (variables?: CreateUserMutationVariables) => fetcher<CreateUserMutation, CreateUserMutationVariables>(dataSource.endpoint, dataSource.fetchParams || {}, CreateUserDocument, variables)(),
       options
     );
@@ -437,13 +437,13 @@ export const useEditUserMutation = <
       options?: UseMutationOptions<EditUserMutation, TError, EditUserMutationVariables, TContext>
     ) =>
     useMutation<EditUserMutation, TError, EditUserMutationVariables, TContext>(
-      'EditUser',
+      ['EditUser'],
       (variables?: EditUserMutationVariables) => fetcher<EditUserMutation, EditUserMutationVariables>(dataSource.endpoint, dataSource.fetchParams || {}, EditUserDocument, variables)(),
       options
     );
 export const DeleteUserDocument = `
-    mutation DeleteUser($id: ID!) {
-  deleteUser(id: $id) {
+    mutation DeleteUser($username: String!) {
+  deleteUser(username: $username) {
     id
     username
     name
@@ -458,13 +458,13 @@ export const useDeleteUserMutation = <
       options?: UseMutationOptions<DeleteUserMutation, TError, DeleteUserMutationVariables, TContext>
     ) =>
     useMutation<DeleteUserMutation, TError, DeleteUserMutationVariables, TContext>(
-      'DeleteUser',
+      ['DeleteUser'],
       (variables?: DeleteUserMutationVariables) => fetcher<DeleteUserMutation, DeleteUserMutationVariables>(dataSource.endpoint, dataSource.fetchParams || {}, DeleteUserDocument, variables)(),
       options
     );
 export const GetUserDocument = `
-    query GetUser($id: ID!) {
-  getUser(id: $id) {
+    query GetUser($username: String!) {
+  getUser(username: $username) {
     id
     username
     name

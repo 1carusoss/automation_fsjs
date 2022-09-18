@@ -17,7 +17,6 @@ plugins:
 
 resources:
   - ${file(resources/dynamodb-table.yml)}
-  - ${file(resources/cognito-user-pool.yml)}
 
 custom:
   stage: ${opt:stage, self:provider.stage}

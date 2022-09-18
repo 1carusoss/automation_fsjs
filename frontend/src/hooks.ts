@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export function useForm<S>(fields: S) {
   const [state, setState] = useState<S>(fields);

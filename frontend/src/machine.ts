@@ -1,4 +1,5 @@
 import { createMachine, assign } from "xstate";
+import { User } from '@scalablefsjs/types';
 
 export enum AuthStates {
   LOGIN = "LOGIN_STATE_IDLE",
@@ -32,8 +33,9 @@ export enum AuthModes {
 
 export interface AuthEvent {
   type: AuthEvents;
-  username?: string;
-  password?: string;
+  user: User;
+  login: () => Promise<User>;
+  signup: () => Promise<any>;
 }
 
 export interface AuthContext {
@@ -41,26 +43,21 @@ export interface AuthContext {
   autoConfirm: boolean;
   maxLoginAttempts: number;
   retryAttempts: number;
+  user: User | undefined;
+  errorMessage: string | undefined;
 }
 
 export interface AuthMachineProps {
-  login: () => Promise<unknown>;
-  signup: () => Promise<unknown>;
-  resetPassword: () => Promise<unknown>;
-  confirm: () => Promise<unknown>;
   autoConfirm: boolean;
   maxLoginAttempts: number;
   maxRetryAttempts: number;
+
 }
 
 export const maxLogins = (ctx: AuthContext) =>
   ctx.loginAttempts < ctx.maxLoginAttempts;
 
 export const createAuthMachine = ({
-  login,
-  signup,
-  resetPassword,
-  confirm,
   autoConfirm,
   maxLoginAttempts,
   maxRetryAttempts,
@@ -73,6 +70,8 @@ export const createAuthMachine = ({
         retryAttempts: 0,
         maxLoginAttempts,
         autoConfirm,
+        user: undefined,
+        errorMessage: undefined
       },
       states: {
         [AuthModes.authenticated]: {
@@ -83,7 +82,12 @@ export const createAuthMachine = ({
           }
         },
 
-        [AuthModes.session_failure]: { type: "final" },
+        [AuthModes.session_failure]: { 
+          entry: assign({
+            errorMessage: "Authentication failed. Try again later.",
+          }),
+          type: "final" 
+        },
 
         [AuthModes.error]: {
           entry: assign({
@@ -152,11 +156,22 @@ export const createAuthMachine = ({
         [AuthStates.LOGIN_RESOLVE]: {
           invoke: {
             src: (_, event) => {
-              console.log(event.username);
-              return login();
+              return event.login();
             },
-            onDone: AuthModes.authenticated,
-            onError: AuthModes.error,
+            onDone: {
+              target: AuthModes.authenticated,
+              actions: assign({ user: (context, event) => {
+                return event.data;
+              }})
+            },
+            onError: {
+              target: AuthModes.error,
+              actions: assign({
+                errorMessage: (context, event) => {
+                  return event.data.message;
+                }
+              })
+            },
           },
         },
 
@@ -176,9 +191,20 @@ export const createAuthMachine = ({
 
         [AuthStates.SIGNUP_RESOLVE]: {
           invoke: {
-            src: () => signup(),
-            onDone: autoConfirm ? AuthStates.LOGIN : AuthStates.CONFIRM,
-            onError: AuthModes.error,
+            src: (_, event) => {
+              return event.signup();
+            },
+            onDone: {
+              target: AuthStates.LOGIN
+            },
+            onError: {
+              target: AuthModes.error,
+              actions: assign({
+                errorMessage: (context, event) => {
+                  return event.data.message;
+                }
+              })
+            },
           },
         },
 
@@ -195,7 +221,7 @@ export const createAuthMachine = ({
 
         [AuthStates.RESET_PASSWORD_RESOLVE]: {
           invoke: {
-            src: () => resetPassword(),
+            src: () => randomFetch(),
             onDone: autoConfirm ? AuthStates.LOGIN : AuthStates.CONFIRM,
             onError: AuthModes.error,
           },
@@ -211,7 +237,7 @@ export const createAuthMachine = ({
 
         [AuthStates.CONFIRM_RESOLVE]: {
           invoke: {
-            src: () => confirm(),
+            src: () => randomFetch(),
             onDone: AuthStates.LOGIN,
             onError: AuthModes.error,
           },
@@ -238,10 +264,6 @@ export const randomFetch = () => {
 };
 
 export const authMachine = createAuthMachine({
-  login: randomFetch,
-  signup: randomFetch,
-  resetPassword: randomFetch,
-  confirm: randomFetch,
   maxLoginAttempts: 5,
   autoConfirm: true,
   maxRetryAttempts: 5,
