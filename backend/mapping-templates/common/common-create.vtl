@@ -2,13 +2,13 @@
   "version": "2017-02-28",
   "operation": "PutItem",
   "key": {
-    "id": #if($ctx.args.input.id) $util.dynamodb.toDynamoDBJson($ctx.args.input.id) #else $util.dynamodb.toDynamoDBJson($util.autoId()) #end,
+    "username": $util.dynamodb.toDynamoDBJson($ctx.args.input.username),
   },
   "attributeValues": $util.dynamodb.toMapValuesJson($ctx.args.input),
   "condition": {
-    "expression": "attribute_not_exists(#id)",
+    "expression": "attribute_not_exists(#username)",
     "expressionNames": {
-      "#id": "id",
+      "#username": "username",
     },
   },
 }

@@ -1,6 +1,6 @@
 {
   "name": "@scalablefsjs/types",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Type declarations for SFJ.",
   "main": "index.d.ts",
   "scripts": {

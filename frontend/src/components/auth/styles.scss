@@ -12,6 +12,11 @@ $facebook-blue: #4267B2;
 
   .txt-sm {
     font-size: 12px;
+
+    &--err {
+      max-width: 200px;
+      color: red;
+    }
   }
 
   .btn-lnk {

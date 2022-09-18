@@ -12,15 +12,15 @@ mutation EditUser($input: EditUserInput!) {
     name
   }
 }
-mutation DeleteUser($id: ID!) {
-  deleteUser(id: $id) {
+mutation DeleteUser($username: String!) {
+  deleteUser(username: $username) {
     id
     username
     name
   }
 }
-query GetUser($id: ID!) {
-  getUser(id: $id) {
+query GetUser($username: String!) {
+  getUser(username: $username) {
     id
     username
     name

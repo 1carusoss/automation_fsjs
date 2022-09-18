@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { useActor, useSelector } from "@xstate/react";
+import { useSelector } from "@xstate/react";
 import GlobalState from "../../globalState";
-import { AuthEvents, AuthStates } from "../../machine";
+import { AuthStates } from "../../machine";
 import Login from './Login';
 import Signup from './Signup';
 import ChangePassword from './ChangePassword';
@@ -12,9 +12,13 @@ function matchState(state: any, authState: AuthStates) {
 }
 
 function authStateSelector(state: any): JSX.Element {
-  if (matchState(state, AuthStates.LOGIN) || matchState(state, state.matches)) {
+  if(state.value === "ERROR") {
+    state = state.history;
+  }
+
+  if (matchState(state, AuthStates.LOGIN) || matchState(state, AuthStates.LOGIN_RESOLVE)) {
     return <Login />
-  } else if (matchState(state, AuthStates.SIGNUP || matchState(state, AuthStates.SIGNUP_RESOLVE))) {
+  } else if (matchState(state, AuthStates.SIGNUP) || matchState(state, AuthStates.SIGNUP_RESOLVE)) {
     return <Signup />
   } else if (matchState(state, AuthStates.RESET_PASSWORD) || matchState(state, AuthStates.RESET_PASSWORD_RESOLVE)) {
     return <ChangePassword />
@@ -23,7 +27,6 @@ function authStateSelector(state: any): JSX.Element {
 
 export default function AuthContainer() {
   const { authService } = useContext(GlobalState);
-  const [state] = useActor(authService);
   const authState = useSelector(authService, authStateSelector);
   return authState;
 }

@@ -1,18 +1,13 @@
 import { useContext } from "react";
-import { useActor, useSelector } from "@xstate/react";
 import { useForm } from "../../hooks";
 import GlobalState from "../../globalState";
-import { AuthEvents, AuthStates } from "../../machine";
-
+import { AuthEvents } from "../../machine";
+import { useGetUserQuery } from "@scalablefsjs/codegen";
 
 const DEFAULT_STATE = {
   username: "",
   password: "",
 };
-
-function isResolvingSelector(state: any) {
-  return state.matches(AuthStates.LOGIN_RESOLVE);
-}
 
 export default function Login() {
   const {
@@ -22,11 +17,27 @@ export default function Login() {
 
   const { authService } = useContext(GlobalState);
 
-  const { send } = authService;
+  const { send, state } = authService;
 
-  const [state] = useActor(authService);
+  const { data, isFetching, refetch } = useGetUserQuery(
+    {
+      endpoint: process.env.REACT_APP_ENDPOINT as string,
+      fetchParams: {
+        headers: { "X-API-Key": process.env.REACT_APP_APIKEY as string},
+      },
+    },
+    { username },
+    { enabled: false }
+  );
 
-  const isResolving = useSelector(authService, isResolvingSelector);
+  async function login() {
+    if(!username.length || !password.length) throw Error('Username or password missing.');
+
+    const res = await refetch();
+    if(res.isSuccess) {
+      return res.data.getUser;
+    } else throw res.error;
+  }
 
   return (
     <div className="form">
@@ -51,18 +62,22 @@ export default function Login() {
         }}
       />
 
-      {isResolving ? (
+      {isFetching && !data ? (
         <p>Loading...</p>
       ) : (
         <button
           {...{
             className: "button",
-            onClick: () => send({ type: AuthEvents.LOGIN, username, password }),
+            onClick: async () => {
+              send({ type: AuthEvents.LOGIN, login });
+            },
           }}
         >
           Login
         </button>
       )}
+
+      <p className="txt-sm txt-sm--err">{state?.context && state.context.errorMessage}</p>
 
       <p className="txt-sm">
         Don't have an account?{" "}

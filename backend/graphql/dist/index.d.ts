@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { UseMutationOptions, UseQueryOptions } from 'react-query';
+import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 export declare type Maybe<T> = T | null;
 export declare type Exact<T extends {
     [key: string]: unknown;
@@ -54,7 +54,7 @@ export declare type MutationCreateUserArgs = {
     input: CreateUserInput;
 };
 export declare type MutationDeleteUserArgs = {
-    id: Scalars['ID'];
+    username: Scalars['String'];
 };
 export declare type MutationEditUserArgs = {
     input: EditUserInput;
@@ -68,7 +68,7 @@ export declare type QueryGetAllUsersArgs = {
     nextToken?: Maybe<Scalars['String']>;
 };
 export declare type QueryGetUserArgs = {
-    id: Scalars['ID'];
+    username: Scalars['String'];
 };
 export declare type TableBooleanFilterInput = {
     eq?: Maybe<Scalars['Boolean']>;
@@ -156,7 +156,7 @@ export declare type EditUserMutation = {
     };
 };
 export declare type DeleteUserMutationVariables = Exact<{
-    id: Scalars['ID'];
+    username: Scalars['String'];
 }>;
 export declare type DeleteUserMutation = {
     __typename?: 'Mutation';
@@ -168,7 +168,7 @@ export declare type DeleteUserMutation = {
     };
 };
 export declare type GetUserQueryVariables = Exact<{
-    id: Scalars['ID'];
+    username: Scalars['String'];
 }>;
 export declare type GetUserQuery = {
     __typename?: 'Query';
@@ -305,12 +305,12 @@ export interface AwsurlScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 export declare type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
     createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
-    deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+    deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'username'>>;
     editUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationEditUserArgs, 'input'>>;
 };
 export declare type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
     getAllUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserConnection']>>>, ParentType, ContextType, RequireFields<QueryGetAllUsersArgs, never>>;
-    getUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+    getUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryGetUserArgs, 'username'>>;
 };
 export declare type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
     id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -344,7 +344,7 @@ export declare const useCreateUserMutation: <TError = unknown, TContext = unknow
     fetchParams?: RequestInit;
 }, options?: UseMutationOptions<CreateUserMutation, TError, Exact<{
     input: CreateUserInput;
-}>, TContext> | undefined) => import("react-query").UseMutationResult<CreateUserMutation, TError, Exact<{
+}>, TContext> | undefined) => import("@tanstack/react-query").UseMutationResult<CreateUserMutation, TError, Exact<{
     input: CreateUserInput;
 }>, TContext>;
 export declare const EditUserDocument = "\n    mutation EditUser($input: EditUserInput!) {\n  editUser(input: $input) {\n    id\n    username\n    name\n  }\n}\n    ";
@@ -353,25 +353,25 @@ export declare const useEditUserMutation: <TError = unknown, TContext = unknown>
     fetchParams?: RequestInit;
 }, options?: UseMutationOptions<EditUserMutation, TError, Exact<{
     input: EditUserInput;
-}>, TContext> | undefined) => import("react-query").UseMutationResult<EditUserMutation, TError, Exact<{
+}>, TContext> | undefined) => import("@tanstack/react-query").UseMutationResult<EditUserMutation, TError, Exact<{
     input: EditUserInput;
 }>, TContext>;
-export declare const DeleteUserDocument = "\n    mutation DeleteUser($id: ID!) {\n  deleteUser(id: $id) {\n    id\n    username\n    name\n  }\n}\n    ";
+export declare const DeleteUserDocument = "\n    mutation DeleteUser($username: String!) {\n  deleteUser(username: $username) {\n    id\n    username\n    name\n  }\n}\n    ";
 export declare const useDeleteUserMutation: <TError = unknown, TContext = unknown>(dataSource: {
     endpoint: string;
     fetchParams?: RequestInit;
 }, options?: UseMutationOptions<DeleteUserMutation, TError, Exact<{
-    id: Scalars['ID'];
-}>, TContext> | undefined) => import("react-query").UseMutationResult<DeleteUserMutation, TError, Exact<{
-    id: Scalars['ID'];
+    username: Scalars['String'];
+}>, TContext> | undefined) => import("@tanstack/react-query").UseMutationResult<DeleteUserMutation, TError, Exact<{
+    username: Scalars['String'];
 }>, TContext>;
-export declare const GetUserDocument = "\n    query GetUser($id: ID!) {\n  getUser(id: $id) {\n    id\n    username\n    name\n  }\n}\n    ";
+export declare const GetUserDocument = "\n    query GetUser($username: String!) {\n  getUser(username: $username) {\n    id\n    username\n    name\n  }\n}\n    ";
 export declare const useGetUserQuery: <TData = GetUserQuery, TError = unknown>(dataSource: {
     endpoint: string;
     fetchParams?: RequestInit;
-}, variables: GetUserQueryVariables, options?: UseQueryOptions<GetUserQuery, TError, TData, import("react-query").QueryKey> | undefined) => import("react-query").UseQueryResult<TData, TError>;
+}, variables: GetUserQueryVariables, options?: UseQueryOptions<GetUserQuery, TError, TData, import("@tanstack/react-query").QueryKey> | undefined) => import("@tanstack/react-query").UseQueryResult<TData, TError>;
 export declare const GetAllUsersDocument = "\n    query GetAllUsers($nextToken: String) {\n  getAllUsers(nextToken: $nextToken) {\n    items {\n      id\n      username\n      name\n    }\n  }\n}\n    ";
 export declare const useGetAllUsersQuery: <TData = GetAllUsersQuery, TError = unknown>(dataSource: {
     endpoint: string;
     fetchParams?: RequestInit;
-}, variables?: GetAllUsersQueryVariables, options?: UseQueryOptions<GetAllUsersQuery, TError, TData, import("react-query").QueryKey> | undefined) => import("react-query").UseQueryResult<TData, TError>;
+}, variables?: GetAllUsersQueryVariables, options?: UseQueryOptions<GetAllUsersQuery, TError, TData, import("@tanstack/react-query").QueryKey> | undefined) => import("@tanstack/react-query").UseQueryResult<TData, TError>;

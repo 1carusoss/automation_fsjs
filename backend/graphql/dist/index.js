@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGetAllUsersQuery = exports.GetAllUsersDocument = exports.useGetUserQuery = exports.GetUserDocument = exports.useDeleteUserMutation = exports.DeleteUserDocument = exports.useEditUserMutation = exports.EditUserDocument = exports.useCreateUserMutation = exports.CreateUserDocument = void 0;
-const react_query_1 = require("react-query");
+const react_query_1 = require("@tanstack/react-query");
 function fetcher(endpoint, requestInit, query, variables) {
     return async () => {
         const res = await fetch(endpoint, {
@@ -26,7 +26,7 @@ exports.CreateUserDocument = `
   }
 }
     `;
-const useCreateUserMutation = (dataSource, options) => (0, react_query_1.useMutation)('CreateUser', (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.CreateUserDocument, variables)(), options);
+const useCreateUserMutation = (dataSource, options) => (0, react_query_1.useMutation)(['CreateUser'], (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.CreateUserDocument, variables)(), options);
 exports.useCreateUserMutation = useCreateUserMutation;
 exports.EditUserDocument = `
     mutation EditUser($input: EditUserInput!) {
@@ -37,22 +37,22 @@ exports.EditUserDocument = `
   }
 }
     `;
-const useEditUserMutation = (dataSource, options) => (0, react_query_1.useMutation)('EditUser', (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.EditUserDocument, variables)(), options);
+const useEditUserMutation = (dataSource, options) => (0, react_query_1.useMutation)(['EditUser'], (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.EditUserDocument, variables)(), options);
 exports.useEditUserMutation = useEditUserMutation;
 exports.DeleteUserDocument = `
-    mutation DeleteUser($id: ID!) {
-  deleteUser(id: $id) {
+    mutation DeleteUser($username: String!) {
+  deleteUser(username: $username) {
     id
     username
     name
   }
 }
     `;
-const useDeleteUserMutation = (dataSource, options) => (0, react_query_1.useMutation)('DeleteUser', (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.DeleteUserDocument, variables)(), options);
+const useDeleteUserMutation = (dataSource, options) => (0, react_query_1.useMutation)(['DeleteUser'], (variables) => fetcher(dataSource.endpoint, dataSource.fetchParams || {}, exports.DeleteUserDocument, variables)(), options);
 exports.useDeleteUserMutation = useDeleteUserMutation;
 exports.GetUserDocument = `
-    query GetUser($id: ID!) {
-  getUser(id: $id) {
+    query GetUser($username: String!) {
+  getUser(username: $username) {
     id
     username
     name

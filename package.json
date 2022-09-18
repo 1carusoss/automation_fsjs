@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ashton Morris",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@tanstack/react-query": "^4.2.3"
+  }
 }

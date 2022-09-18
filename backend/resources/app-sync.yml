@@ -1,9 +1,5 @@
 name: SFSJSAppsync-${self:custom.env}
-authenticationType: AMAZON_COGNITO_USER_POOLS
-userPoolConfig:
-  awsRegion: ${self:custom.region}
-  defaultAction: ALLOW
-  userPoolId: ${self:custom.userPoolId}
+authenticationType: API_KEY
 additionalAuthenticationProviders:
   - authenticationType: AWS_IAM
 dataSources:
