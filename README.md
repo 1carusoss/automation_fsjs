@@ -31,14 +31,14 @@ The “Iron Triangle” of project management dictates that “fast” translate
 
 <p>It’s about systemizing the design. As a noun. That’s literally all a design system means. That’s not to say only designers can do it. 
 
-_-- Jina (@jina) _
+-- Jina (@jina)
 
 A holistic deep-dive into design systems is a herculean task that’s too heavy for this document. An amazing resource for further learning about this topic is “Design Systems and Front-End Architecture” by [Stuart Robson](https://noti.st/sturobson).
 
 The building blocks of a Design System is succinctly shown here: 
 
 
-![alt_text](images/image1.png "image_tooltip")
+![design system building blocks](images/image1.png "image_tooltip")
 
 
 **[Design Systems vs. Pattern Libraries vs. Style Guides – What’s the Difference?](https://www.uxpin.com/studio/blog/design-systems-vs-pattern-libraries-vs-style-guides-whats-difference/)**
